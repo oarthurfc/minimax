@@ -144,7 +144,7 @@ T(n) = 2T(n/2) + O(1)
    - \( T(n) = O(n^1) = O(n) \)
 
 ### **Visual Diagram**
-![Visual diagram](diagrama-visual-1.png)
+![Visual diagram](/assets/diagrama-visual-1.png)
 
 
 ### **Conclusion**
