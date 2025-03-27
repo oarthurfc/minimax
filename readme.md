@@ -1,160 +1,109 @@
-# Project: Minimax Algorithm with Alpha-Beta Pruning
+# Projeto: Algoritmo de Seleção Simultânea do Maior e Menor Elemento (MaxMin Select)
 
-## Project Description
+## Descrição do Projeto
 
-This project implements the **Minimax algorithm with Alpha-Beta pruning**, a fundamental technique used in decision-making and game theory. The algorithm helps optimize decision-making in adversarial games like chess, tic-tac-toe, and checkers by minimizing the possible loss for a worst-case scenario.
+Este projeto implementa o **algoritmo de seleção simultânea do maior e menor elemento (MaxMin Select)**, utilizando a abordagem de **divisão e conquista**. Esse algoritmo permite encontrar simultaneamente o maior e o menor elemento de um conjunto de números de forma eficiente, reduzindo o número de comparações em relação a uma abordagem ingînua.
 
-### Algorithm Logic
+### Lógica do Algoritmo
 
-The Minimax algorithm works by evaluating all possible moves in a game tree, assuming both players play optimally. Alpha-Beta pruning improves efficiency by eliminating branches that don't need to be explored, reducing computation time.
+O algoritmo **MaxMin Select** segue a abordagem de **divisão e conquista**, onde a sequência é dividida em partes menores, e os valores máximos e mínimos são combinados recursivamente.
 
-#### **Basic Minimax Steps:**
-1. The algorithm recursively explores all possible moves up to a given depth.
-2. It assigns values to terminal nodes based on a heuristic evaluation function.
-3. It propagates these values back up the tree:
-   - **Maximizing player** selects the highest value.
-   - **Minimizing player** selects the lowest value.
-4. The best move is selected at the root node.
+#### **Passos do Algoritmo:**
+1. **Caso base:** Se houver apenas um elemento, ele é tanto o maior quanto o menor.
+2. **Comparando pares:** Se houver dois elementos, um é o maior e o outro é o menor.
+3. **Divisão recursiva:** O conjunto é dividido ao meio, e os máximos e mínimos de cada metade são encontrados recursivamente.
+4. **Combinação:** O menor dos dois valores mínimos é selecionado como o menor geral, e o maior dos dois valores máximos é escolhido como o maior geral.
 
-#### **Alpha-Beta Pruning Optimization:**
-- **Alpha (α):** Best value found for the maximizing player.
-- **Beta (β):** Best value found for the minimizing player.
-- If at any point, the current node's value exceeds β (for max player) or is lower than α (for min player), further exploration of that branch is stopped.
+## Explicação do Código
+A implementação do **MaxMin Select** segue os seguintes passos:
 
-## Code Explanation
-The implementation of the Minimax algorithm with Alpha-Beta pruning is structured as follows:
-
-1. **Defining the Minimax function with Alpha-Beta pruning:**
-
+1. **Definição da função recursiva:**
    ```python
-   def minimax(position, depth, alpha, beta, maximizingPlayer):
+   def maxmin_select(arr, left, right):
    ```
+   - A função recebe um array e os índices `left` e `right` para dividir a sequência.
 
-   - The function takes a game position, depth, alpha, beta, and a boolean indicating if it's the maximizing player's turn.
-
-2. **Base case: Terminal node or depth limit reached:**
-
+2. **Caso base:**
    ```python
-   if depth == 0 or is_terminal(position):
-       return evaluate(position)
+   if left == right:
+       return arr[left], arr[left]
    ```
+   - Se houver apenas um elemento, ele é retornado como maior e menor.
 
-   - If the search reaches the maximum depth or a terminal state, it returns the heuristic evaluation of the position.
-
-3. **Maximizing player's turn:**
-
+3. **Comparando dois elementos:**
    ```python
-   if maximizingPlayer:
-       maxEval = float('-inf')
-       for child in get_children(position):
-           eval = minimax(child, depth-1, alpha, beta, False)
-           maxEval = max(maxEval, eval)
-           alpha = max(alpha, eval)
-           if beta <= alpha:
-               break
-       return maxEval
+   if right == left + 1:
+       return (arr[left], arr[right]) if arr[left] < arr[right] else (arr[right], arr[left])
    ```
+   - Se houver dois elementos, eles são comparados diretamente.
 
-   - Iterates through possible moves, updating α and pruning when possible.
-
-4. **Minimizing player's turn:**
-
+4. **Dividindo a sequência:**
    ```python
-   else:
-       minEval = float('inf')
-       for child in get_children(position):
-           eval = minimax(child, depth-1, alpha, beta, True)
-           minEval = min(minEval, eval)
-           beta = min(beta, eval)
-           if beta <= alpha:
-               break
-       return minEval
+   mid = (left + right) // 2
+   min1, max1 = maxmin_select(arr, left, mid)
+   min2, max2 = maxmin_select(arr, mid + 1, right)
    ```
+   - O array é dividido ao meio, e o algoritmo é chamado recursivamente.
 
-   - Iterates through possible moves, updating β and pruning when possible.
-
-5. **Running the Minimax function:**
-
+5. **Combinando os resultados:**
    ```python
-   best_move = minimax(initial_position, max_depth, float('-inf'), float('inf'), True)
+   return min(min1, min2), max(max1, max2)
    ```
+   - O menor dos dois valores mínimos e o maior dos dois valores máximos são selecionados.
 
-   - Calls the Minimax function on the initial game state with the maximum depth defined.
+6. **Executando o algoritmo:**
+   ```python
+   numbers = [3, 1, 5, 2, 4, 8, 7]
+   min_val, max_val = maxmin_select(numbers, 0, len(numbers) - 1)
+   print(f"Menor: {min_val}, Maior: {max_val}")
+   ```
+   - O algoritmo é chamado para encontrar o menor e o maior elemento do conjunto.
 
-## How to Run the Project
+## Como Executar o Projeto
 
-### Requirements
+### Requisitos
+- 🐍 Python 3.x instalado
 
-- 🐍 Python 3.x installed
-
-### Running the Code
-
-1. 📥 Clone this repository:
+### Executando o Código
+1. 📥 Clone este repositório:
    ```sh
-   git clone https://github.com/oarthurfc/minimax.git
-   cd minimax
+   git clone https://github.com/seu-usuario/maxmin-select.git
+   cd maxmin-select
    ```
-2. ▶️ Run the main script:
+2. ▶️ Execute o script principal:
    ```sh
    python main.py
    ```
-3. 🎮 Choose a game scenario and observe the algorithm's decision-making.
+3. 🔍 O menor e o maior número da lista serão exibidos.
 
-## Asymptotic Complexity
+## Complexidade Assintótica
 
-### **Minimax without Alpha-Beta Pruning**
+A complexidade do algoritmo pode ser analisada pela relação de recorrência:
 
-| Case         | Complexity      |
-|-------------|----------------|
-| ⚡ Best case | \(O(b^d)\)       |
-| ⚡ Average case | \(O(b^d)\) |
-| ⚡ Worst case | \(O(b^d)\) |
-
-Where:
-- **\( b \)** = branching factor (number of possible moves per turn)
-- **\( d \)** = depth of the search tree
-
-### **Minimax with Alpha-Beta Pruning**
-
-| Case         | Complexity      |
-|-------------|----------------|
-| ⚡ Best case | \(O(b^{d/2})\) |
-| ⚡ Average case | \(O(b^d)\) |
-| ⚡ Worst case | \(O(b^d)\) |
-
-By pruning unnecessary branches, the algorithm's performance improves, especially in favorable scenarios, reducing search complexity closer to \( O(b^{d/2}) \).
-
-## Asymptotic Complexity Analysis Using Master Theorem
-
-Given the recurrence:
 \[
 T(n) = 2T(n/2) + O(1)
 \]
 
-1. **Identifying values in the Master Theorem formula:**
+### **Cálculo pelo Teorema Mestre**
+1. **Identificando os valores:**
    - \( a = 2 \), \( b = 2 \), \( f(n) = O(1) \)
 
-2. **Calculating log_b a:**
-   - \( p = \log_2 2 = 1 \)
+2. **Cálculo de \( log_b a \):**
+   - \( p = log_2 2 = 1 \)
 
-3. **Determining the case of the Master Theorem:**
-   - \( f(n) = O(1) = O(n^0) \) with \( c = 0 \) and \( p = 1 \), so **Case 1 applies**.
+3. **Determinação do caso do Teorema Mestre:**
+   - \( f(n) = O(1) = O(n^0) \) com \( c = 0 \) e \( p = 1 \), então **o caso 1 se aplica**.
 
-4. **Asymptotic solution:**
-   - \( T(n) = O(n^1) = O(n) \)
+4. **Solução assintótica:**
+   - \( T(n) = O(n) \)
 
-### **Visual Diagram**
-![Visual diagram](/assets/diagrama-visual-1.png)
+## Conclusão
 
+- **O algoritmo MaxMin Select encontra simultaneamente o maior e o menor elemento da lista usando divisão e conquista.**
+- **Reduz o número de comparações em relação a uma abordagem ingînua.**
+- **Tem complexidade O(n), tornando-se eficiente para listas grandes.**
 
-### **Conclusion**
+## Referências
 
-- **Minimax without pruning** runs in **O(b^d)**, making it impractical for deep searches.
-- **Alpha-Beta pruning** significantly optimizes performance, often reducing complexity to **O(b^{d/2})** in the best case.
-- **The complexity of the MaxMin selection algorithm is O(n)** according to the Master Theorem.
-
-## References
-
-- 📚 [Minimax Algorithm - Wikipedia](https://en.wikipedia.org/wiki/Minimax)
-- 📚 [Alpha-Beta Pruning - GeeksforGeeks](https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-4-alpha-beta-pruning/)
-
+- 📚 [Seleção Simultânea - Wikipedia](https://pt.wikipedia.org/wiki/Algoritmo_de_selec%C3%A7%C3%A3o)
+- 📚 [Divisão e Conquista - GeeksforGeeks](https://www.geeksforgeeks.org/divide-and-conquer/)
