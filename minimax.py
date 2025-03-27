@@ -1,32 +1,24 @@
-import math
+def max_min_select(arr, left, right):
+    # Caso base: Apenas um elemento na lista
+    if left == right:
+        return arr[left], arr[left]
+    
+    # Caso base: Dois elementos, comparando diretamente
+    if right == left + 1:
+        if arr[left] < arr[right]:
+            return arr[left], arr[right]
+        else:
+            return arr[right], arr[left]
+    
+    # Dividindo o array ao meio
+    mid = (left + right) // 2
+    min1, max1 = max_min_select(arr, left, mid)
+    min2, max2 = max_min_select(arr, mid + 1, right)
+    
+    # Combinando os resultados das subárvores
+    return min(min1, min2), max(max1, max2)
 
-def minimax(node, depth, alpha, beta, maximizingPlayer):
-    if depth == 0 or isinstance(node, int):
-        return node  
-
-    if maximizingPlayer:
-        maxEval = -math.inf
-        for child in node:
-            eval = minimax(child, depth - 1, alpha, beta, False)
-            maxEval = max(maxEval, eval)
-            alpha = max(alpha, eval)
-            if beta <= alpha:
-                break  
-        return maxEval
-    else:
-        minEval = math.inf
-        for child in node:
-            eval = minimax(child, depth - 1, alpha, beta, True)
-            minEval = min(minEval, eval)
-            beta = min(beta, eval)
-            if beta <= alpha:
-                break  
-        return minEval
-
-tree = [
-    [[3, 5], [6, 9]],  
-    [[1, 2], [0, -1]]  
-]
-
-result = minimax(tree, 3, -math.inf, math.inf, True)
-print("Minimax Alpha-Beta result:", result)
+# Testando o algoritmo
+arr = [12, 4, 56, 19, 8, 23, 89, 5]
+min_val, max_val = max_min_select(arr, 0, len(arr) - 1)
+print(f"Menor valor: {min_val}, Maior valor: {max_val}")
