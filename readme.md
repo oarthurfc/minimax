@@ -105,5 +105,5 @@ T(n) = 2T(n/2) + O(1)
 
 ## Referências
 
-- 📚 [Seleção Simultânea - Wikipedia](https://pt.wikipedia.org/wiki/Algoritmo_de_selec%C3%A7%C3%A3o)
+- 📚 [Valor máximo e mínimo de um veto - Blog Cyberini](https://www.blogcyberini.com/2017/09/maximo-e-minimo-de-um-vetor.html)
 - 📚 [Divisão e Conquista - GeeksforGeeks](https://www.geeksforgeeks.org/divide-and-conquer/)
